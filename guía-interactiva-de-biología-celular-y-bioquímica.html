@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guía Interactiva de Biología Celular y Bioquímica</title>
+<style>
+  :root{
+    --bg:#faf7f2; --panel:#ffffff; --ink:#1f2430; --muted:#5a6472;
+    --accent:#0e6b5c; --accent-soft:#e3f0ed; --border:#ddd6c9;
+    --highlight:#fff3c4; --card:#f4f1ea; --code:#0e6b5c;
+    --shadow:0 2px 10px rgba(31,36,48,.08);
+    --maxw:800px;
+  }
+  [data-theme="dark"]{
+    --bg:#14181f; --panel:#1d232d; --ink:#e8e6e1; --muted:#a8b0ba;
+    --accent:#5cc8b4; --accent-soft:#203630; --border:#333c49;
+    --highlight:#4a4425; --card:#232b36; --code:#5cc8b4;
+    --shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter","Segoe UI",Roboto,system-ui,-apple-system,sans-serif;
+    font-size:17px; line-height:1.7;
+  }
+  header.topbar{
+    position:sticky; top:0; z-index:50; display:flex; gap:12px; align-items:center;
+    padding:10px 18px; background:var(--panel); border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow);
+  }
+  header.topbar h1{font-size:1.05rem; margin:0; flex:1; font-weight:700}
+  header.topbar .brand-mark{color:var(--accent)}
+  .btn{
+    font:inherit; font-size:.85rem; border:1px solid var(--border);
+    background:var(--bg); color:var(--ink); border-radius:8px;
+    padding:6px 12px; cursor:pointer; white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--accent); color:var(--accent)}
+  .btn.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .layout{display:flex; align-items:flex-start; max-width:1280px; margin:0 auto;}
+  nav#sidebar{
+    position:sticky; top:56px; width:270px; flex:0 0 270px;
+    max-height:calc(100vh - 56px); overflow:auto;
+    padding:20px 14px 40px; font-size:.88rem; border-right:1px solid var(--border);
+  }
+  body.focus nav#sidebar{display:none}
+  nav#sidebar a{display:block; color:var(--muted); text-decoration:none; padding:4px 8px; border-left:2px solid transparent; border-radius:0 6px 6px 0;}
+  nav#sidebar a:hover{color:var(--accent); background:var(--accent-soft)}
+  nav#sidebar a.sub{padding-left:20px; font-size:.82rem}
+  nav#sidebar .group{margin-bottom:14px}
+  nav#sidebar .group>a.main{font-weight:600; color:var(--ink)}
+  main{flex:1; min-width:0; padding:32px 24px 80px;}
+  .content{max-width:var(--maxw); margin:0 auto;}
+  body.focus .content section:not(.active-section){opacity:.45; transition:opacity .3s}
+  .content section:not(.active-section){transition:opacity .3s}
+  h2.module{
+    font-size:1.6rem; line-height:1.3; margin:56px 0 8px; padding-bottom:8px;
+    border-bottom:3px solid var(--accent); color:var(--accent);
+  }
+  h2.module:first-of-type{margin-top:8px}
+  h3{font-size:1.15rem; margin:34px 0 6px; color:var(--ink)}
+  p{margin:10px 0}
+  strong{color:var(--ink)}
+  .tag{
+    display:inline-block; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;
+    background:var(--accent-soft); color:var(--accent); padding:2px 8px; border-radius:999px; font-weight:600;
+  }
+  .defblock,.mechblock,.keyblock{
+    border-left:4px solid var(--accent); background:var(--card);
+    padding:12px 16px; margin:14px 0; border-radius:0 8px 8px 0;
+  }
+  .defblock .label,.mechblock .label,.keyblock .label{
+    display:block; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;
+    font-weight:700; color:var(--accent); margin-bottom:4px;
+  }
+  .keyblock{border-left-color:#b8860b; background:var(--card)}
+  .keyblock .label{color:#b8860b}
+  mark{background:var(--highlight); color:inherit; padding:0 3px; border-radius:3px}
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:.92rem; background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden;}
+  th{background:var(--accent-soft); color:var(--accent); text-align:left; padding:10px 12px; font-size:.85rem; text-transform:uppercase; letter-spacing:.04em}
+  td{border-top:1px solid var(--border); padding:10px 12px; vertical-align:top}
+  tr:nth-child(even) td{background:var(--card)}
+  details.recall{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    margin:10px 0; padding:0; box-shadow:var(--shadow);
+  }
+  details.recall summary{
+    cursor:pointer; padding:12px 16px; font-weight:600; color:var(--accent);
+    list-style:none; display:flex; gap:10px; align-items:baseline;
+  }
+  details.recall summary::-webkit-details-marker{display:none}
+  details.recall summary::before{content:"?"; flex:0 0 auto; width:22px; height:22px; border-radius:50%;
+    background:var(--accent); color:#fff; display:inline-flex; align-items:center justify; align-items:center; justify-content:center;
+    font-size:.8rem; font-weight:700; text-align:center; line-height:22px;}
+  details.recall[open] summary::before{content:"✓"}
+  details.recall .answer{padding:2px 16px 14px; border-top:1px dashed var(--border)}
+  details.recall .answer .hint{font-size:.8rem; color:var(--muted)}
+  /* Glossary */
+  #glossaryPanel{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:18px 20px; margin-top:48px; box-shadow:var(--shadow);
+  }
+  #glossarySearch{
+    width:100%; font:inherit; font-size:.95rem; padding:10px 14px;
+    border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--ink);
+  }
+  #glossarySearch:focus{outline:2px solid var(--accent); outline-offset:1px}
+  #glossaryList{max-height:340px; overflow:auto; margin-top:12px}
+  .gloss-item{padding:8px 4px; border-bottom:1px dashed var(--border)}
+  .gloss-item b{color:var(--accent)}
+  .gloss-item .count{font-size:.75rem; color:var(--muted)}
+  .no-results{color:var(--muted); font-style:italic}
+  footer{color:var(--muted); font-size:.85rem; text-align:center; margin-top:40px}
+  @media (max-width:900px){
+    nav#sidebar{display:none}
+    .layout{display:block}
+  }
+  @media print{ nav#sidebar, header.topbar .btn{display:none} }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <h1><span class="brand-mark">🧬</span> Guía de Biología Celular y Bioquímica</h1>
+  <button class="btn" id="btnFocus" title="Ocultar barra lateral y resaltar la sección activa">🎯 Concentración</button>
+  <button class="btn" id="btnTheme" title="Alternar modo claro / oscuro">🌙 Modo noche</button>
+</header>
+
+<div class="layout">
+<nav id="sidebar" aria-label="Índice de contenidos">
+  <div class="group">
+    <a class="main" href="#m1">1. Membrana Celular</a>
+    <a class="sub" href="#m1-bicapa">Bicapa lipídica</a>
+    <a class="sub" href="#m1-transporte">Ósmosis y difusión</a>
+    <a class="sub" href="#m1-componentes">Glúcidos y colesterol</a>
+    <a class="sub" href="#m1-proteinas">Proteínas de membrana</a>
+  </div>
+  <div class="group">
+    <a class="main" href="#m2">2. Citoplasma</a>
+    <a class="sub" href="#m2-citosol">Citosol</a>
+    <a class="sub" href="#m2-citoesqueleto">Citoesqueleto</a>
+    <a class="sub" href="#m2-organelos">Orgánulos celulares</a>
+    <a class="sub" href="#m2-golgi">Aparato de Golgi</a>
+  </div>
+  <div class="group">
+    <a class="main" href="#m3">3. Núcleo</a>
+    <a class="sub" href="#m3-envoltura">Envoltura nuclear</a>
+    <a class="sub" href="#m3-poros">Poros nucleares</a>
+    <a class="sub" href="#m3-nucleolo">Nucléolo</a>
+    <a class="sub" href="#m3-cromatina">Cromatina (ADN)</a>
+  </div>
+  <div class="group">
+    <a class="main" href="#m4">4. Metabolismo Celular</a>
+    <a class="sub" href="#m4-catabolismo">Catabolismo</a>
+    <a class="sub" href="#m4-anabolismo">Anabolismo</a>
+    <a class="sub" href="#m4-atp">Ciclo de energía (ATP)</a>
+  </div>
+  <div class="group">
+    <a class="main" href="#m5">5. Metabolismo</a>
+    <a class="sub" href="#m5-reacciones">Reacciones bioquímicas</a>
+    <a class="sub" href="#m5-enzimas">Enzimas y regulación</a>
+    <a class="sub" href="#m5-energia">Generación y gasto de energía</a>
+  </div>
+  <div class="group">
+    <a class="main" href="#m6">6. Fotosíntesis</a>
+    <a class="sub" href="#m6-luz">Captación de luz solar</a>
+    <a class="sub" href="#m6-reactivos">Reactivos: H₂O y CO₂</a>
+    <a class="sub" href="#m6-productos">Productos: O₂ y glucosa</a>
+    <a class="sub" href="#m6-estroma">Estroma</a>
+  </div>
+  <div class="group"><a class="main" href="#glosario">📖 Glosario buscable</a></div>
+</nav>
+
+<main>
+<div class="content">
+
+<!-- ============ MÓDULO 1 ============ -->
+<section id="m1">
+<h2 class="module">1. Membrana Celular</h2>
+<p>La <strong>membrana celular</strong> (o membrana plasmática) es la delgada barrera que delimita la célula y separa su medio interno del entorno. Es una estructura <strong>semipermeable</strong>: no deja pasar todo, sino solo lo que la célula necesita, y participa activamente en la comunicación, el reconocimiento y el transporte de sustancias.</p>
+
+<h3 id="m1-bicapa">Bicapa lipídica</h3>
+<div class="defblock"><span class="label">Definición</span>
+La bicapa lipídica es la estructura fundamental de la membrana: dos capas de <strong>fosfolípidos</strong> dispuestas de forma que sus colas <strong>hidrófobas</strong> (repelen el agua) quedan hacia el interior y sus cabezas <strong>hidrófilas</strong> (atraen el agua) quedan hacia fuera, en contacto con los medios acuosos.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Gracias a esta organización, la membrana es una barrera espontánea y estable: las moléculas polares (como iones) no pueden atravesar el interior hidrófobo sin ayuda, mientras que las moléculas pequeñas y no polares (como el O₂) la cruzan con facilidad. Además, la bicapa es <strong>fluida</strong>: los lípidos y proteínas se desplazan lateralmente, lo que permite a la membrana autorrepararse y adaptarse.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Imagina una barcaza de jugadores de rugby: si uno se aparta, los demás se reacomodan cerrando el hueco. La membrana no es una pared rígida, sino un <strong>mar de lípidos fluido</strong> donde flotan proteínas: el modelo del <strong>mosaico fluido</strong>.</div>
+<details class="recall"><summary>Recuperación activa: ¿Por qué los iones no pueden cruzar libremente la bicapa lipídica?</summary>
+<div class="answer"><p>Porque los iones están cargados y son muy hidrófilos; el interior de la bicapa está formado por colas hidrófobas que rechazan las cargas. Por eso necesitan proteínas de canal o transportadoras.</p><p class="hint">Piensa: "cabezas afuera (agua), colas adentro (aceite) → lo cargado se queda afuera".</p></div></details>
+
+<h3 id="m1-transporte">Mecanismos de transporte: ósmosis y difusión</h3>
+<div class="defblock"><span class="label">Definición</span>
+La <strong>difusión</strong> es el movimiento de partículas desde una zona de <strong>mayor concentración</strong> hacia una de <strong>menor concentración</strong> (a favor del gradiente), sin gasto de energía. La <strong>ósmosis</strong> es un caso particular de difusión: el movimiento del <strong>agua</strong> a través de una membrana semipermeable, desde la zona de menor concentración de soluto (más agua) hacia la de mayor concentración de soluto (menos agua libre).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Ambos son mecanismos de <strong>transporte pasivo</strong>: la energía proviene del movimiento térmico natural de las moléculas, no del ATP. La célula aprovecha estos gradientes para captar nutrientes pequeños (O₂, CO₂) y para regular su volumen de agua. Si el medio externo es <strong>hipertónico</strong>, la célula pierde agua y se deshidrata (plasmólisis); si es <strong>hipotónico</strong>, gana agua y puede hincharse.</div>
+<table>
+<tr><th>Aspecto</th><th>Difusión simple</th><th>Difusión facilitada</th><th>Ósmosis</th></tr>
+<tr><td>Qué se transporta</td><td>Moléculas pequeñas y no polares (O₂, CO₂, esteroides)</td><td>Moléculas polares o iones (glucosa, K⁺) a través de proteínas de canal o transportadoras</td><td>Solamente agua</td></tr>
+<tr><td>Requiere proteína de membrana</td><td>No</td><td>Sí (canales o permeasas)</td><td>Sí (acuaporinas)</td></tr>
+<tr><td>Dirección</td><td>De mayor a menor concentración</td><td>De mayor a menor concentración</td><td>Hacia la zona con más soluto</td></tr>
+<tr><td>Gasto de ATP</td><td>Ninguno</td><td>Ninguno</td><td>Ninguno</td></tr>
+<tr><td>Ejemplo biológico</td><td>Intercambio de O₂ en los alvéolos pulmonares</td><td>Entrada de glucosa en células intestinales</td><td>Reabsorción de agua en el intestino o el túbulo renal</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: Una célula se coloca en una solución hipertónica. ¿Qué le ocurre y por qué?</summary>
+<div class="answer"><p>Pierde agua por ósmosis: el medio externo tiene más soluto que el citoplasma, así que el agua sale de la célula hacia donde hay "menos agua libre". La célula se encoge (plasmólisis).</p></div></details>
+
+<h3 id="m1-componentes">Componentes moleculares: glúcidos y colesterol</h3>
+<div class="defblock"><span class="label">Definición</span>
+Los <strong>glúcidos</strong> (azúcares) de la membrana se encuentran unidos a lípidos (glucolípidos) o a proteínas (glucoproteínas), formando siempre la capa externa: el <strong>glucocálix</strong>. El <strong>colesterol</strong> es un lípido esteroide que se inserta entre los fosfolípidos de la bicapa.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Los glúcidos actúan como <strong>etiquetas de identidad</strong>: permiten el reconocimiento celular (por ejemplo, que el sistema inmune distinga células propias de extrañas) y la adhesión entre células. El colesterol funciona como un <strong>regulador de la fluidez</strong>: a temperaturas altas estabiliza la membrana y la hace menos fluida, y a temperaturas bajas impide que se congele y endurezca.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El glucocálix es como el <strong>carné de identidad colgando fuera de la célula</strong>; el colesterol es como un <strong>estabilizador antivibración</strong>: ni muy rígido ni muy suelto, siempre en su punto.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué pasaría con una membrana sin colesterol al bajar la temperatura?</summary>
+<div class="answer"><p>Se volvería demasiado rígida y poco permeable: las colas lipídicas se empaquetarían de forma casi sólida. El colesterol actúa como "cuña" que evita ese empaquetamiento.</p></div></details>
+
+<h3 id="m1-proteinas">Proteínas de membrana: integrales y canales</h3>
+<div class="defblock"><span class="label">Definición</span>
+Las <strong>proteínas integrales</strong> atraviesan total o parcialmente la bicapa (ancladas en su interior hidrófobo); entre ellas destacan las <strong>proteínas de canal</strong>, que forman poros acuosos que permiten el paso de iones y moléculas polares específicas. Las <strong>periféricas</strong>, en cambio, solo se apoyan en una de las caras de la membrana.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Las proteínas integrales realizan casi todas las funciones "activas" de la membrana: transporte (canales, transportadoras), recepción de señales (receptores hormonales), reconocimiento (antígenos) y catálisis enzimática. Los canales pueden estar siempre abiertos o ser <strong>compuertas</strong> (gated) que se abren ante un estímulo eléctrico, químico o mecánico, lo que permite a la célula controlar con precisión cuándo entra o sale cada ion.</div>
+<table>
+<tr><th>Aspecto</th><th>Proteínas integrales</th><th>Proteínas de canal</th></tr>
+<tr><td>Posición en la membrana</td><td>Insertadas en la bicapa (una o varias vueltas)</td><td>Subtipo de integrales: la atraviesan formando un poro</td></tr>
+<tr><td>Función principal</td><td>Transporte, recepción de señales, enzimas, anclaje estructural</td><td>Permitir el paso rápido y selectivo de iones o moléculas pequeñas</td></tr>
+<tr><td>Especificidad</td><td>Depende de su función (cada receptor reconoce su ligando)</td><td>Altamente específica: cada canal selecciona su ion (Na⁺, K⁺, Ca²⁺)</td></tr>
+<tr><td>Regulación</td><td>Según señales celulares</td><td>Puerta abierta/cerrada por voltaje, ligandos o estímulos mecánicos</td></tr>
+<tr><td>Ejemplo</td><td>Receptor de insulina, bomba Na⁺/K⁺</td><td>Canales de K⁺ de la neurona (impulso nervioso)</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: ¿Cuál es la diferencia entre una proteína integral y una periférica, y dónde encaja el canal?</summary>
+<div class="answer"><p>La integral está incrustada en la bicapa; la periférica solo está apoyada en una cara. Las proteínas de canal son un <strong>tipo particular de proteína integral</strong> que atraviesa la bicapa dejando un poro acuoso.</p></div></details>
+</section>
+
+<!-- ============ MÓDULO 2 ============ -->
+<section id="m2">
+<h2 class="module">2. Citoplasma</h2>
+<p>El <strong>citoplasma</strong> es todo el material interior de la célula comprendido entre la membrana plasmática y la envoltura nuclear. Incluye el <strong>citosol</strong> (el medio acuoso), el <strong>citoesqueleto</strong> (la red estructural) y los <strong>orgánulos</strong> (las estructuras especializadas con función definida).</p>
+
+<h3 id="m2-citosol">Citosol</h3>
+<div class="defblock"><span class="label">Definición</span>
+El citosol es la fase acuosa y semitransparente del citoplasma, formada principalmente por agua (≈70–80 %) con sales, iones, aminoácidos, glucosa, ATP y enzimas disueltos en él. No incluye los orgánulos.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Es el <strong>escenario de la química celular</strong>: en él ocurren procesos metabólicos esenciales como la <strong>glucólisis</strong> (primera etapa de la degradación de la glucosa) y la síntesis de proteínas libres en los <strong>ribosomas</strong> que flotan en él. Además, permite el desplazamiento de sustancias dentro de la célula.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El citosol es el <strong>"caldo de trabajo"</strong> de la célula: no es un líquido inerte, sino un medio donde flotan las "herramientas" (enzimas, ribosomas) y los "materiales" (nutrientes) que se usan a cada instante.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué proceso metabólico clave ocurre en el citosol y no dentro de orgánulos?</summary>
+<div class="answer"><p>La <strong>glucólisis</strong>: la transformación de la glucosa en piruvato para obtener energía, que ocurre libremente en el citosol.</p></div></details>
+
+<h3 id="m2-citoesqueleto">Citoesqueleto</h3>
+<div class="defblock"><span class="label">Definición</span>
+El citoesqueleto es una red tridimensional de filamentos proteicos que recorre el citoplasma: <strong>microtúbulos</strong> (tubulina), <strong>microfilamentos</strong> (actina) y <strong>filamentos intermedios</strong>.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Sostiene la forma de la célula, ancla los orgánulos en posición, permite el movimiento celular (pseudópodos, contracción muscular) y el transporte intracelular: los <strong>motoristas moleculares</strong> (quina y dineína sobre microtúbulos; miosina sobre actina) "caminan" arrastrando vesículas. También forma el huso mitótico que separa los cromosomas durante la división celular.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Piénsalo como la <strong>combinación de andamio y red ferroviaria</strong> de la célula: da soporte (como un andamio) y a la vez sus vías (microtúbulos y actina) sirven para transportar carga de un punto a otro.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué estructuras celulares "caminan" sobre los microtúbulos y para qué?</summary>
+<div class="answer"><p>Las proteínas motoras <strong>quina</strong> y <strong>dineína</strong>, que transportan vesículas y orgánulos a lo largo del microtúbulo (quina hacia la periferia, dineína hacia el centro).</p></div></details>
+
+<h3 id="m2-organelos">Orgánulos celulares</h3>
+<div class="defblock"><span class="label">Definición</span>
+Los orgánulos son estructuras intracelulares delimitadas por membrana (en la mayoría de casos) y especializadas en una función concreta; se consideran los "órganos" de la célula.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Cada orgánulo crea un <strong>microambiente químico aislado</strong> donde puede ocurrir una reacción que sería incompatible con el resto de la célula (por ejemplo, la digestión enzimática en el lisosoma, con pH ácido). Esta <strong>compartimentación</strong> es la gran ventaja de la célula eucariota: permite realizar muchas reacciones distintas a la vez, con eficacia y sin interferencias.</div>
+<table>
+<tr><th>Orgánulo</th><th>Función principal</th><th>Idea clave</th></tr>
+<tr><td>Mitocondria</td><td>Respiración celular: produce la mayor parte del ATP</td><td>La "central energética"</td></tr>
+<tr><td>Ribosoma</td><td>Síntesis de proteínas</td><td>La "imprenta" celular</td></tr>
+<tr><td>Retículo endoplásmico rugoso</td><td>Síntesis y plegado de proteínas (con ribosomas adheridos)</td><td>Fábrica de proteínas</td></tr>
+<tr><td>Retículo endoplásmico liso</td><td>Síntesis de lípidos y detoxificación</td><td>Fábrica de lípidos</td></tr>
+<tr><td>Lisosoma</td><td>Digestión intracelular con enzimas hidrolíticas</td><td>El "estómago" celular</td></tr>
+<tr><td>Aparato de Golgi</td><td>Modificación, etiquetado y envío de moléculas</td><td>La "sucursal de correos"</td></tr>
+<tr><td>Vacuola</td><td>Almacenamiento de agua, nutrientes o desechos (muy destacada en vegetales)</td><td>El "almacén"</td></tr>
+<tr><td>Cloroplasto (célula vegetal)</td><td>Fotosíntesis</td><td>La "planta solar" celular</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: ¿Por qué es una ventaja que los orgánulos estén rodeados de membrana?</summary>
+<div class="answer"><p>Porque la <strong>compartimentación</strong> permite mantener condiciones químicas distintas en cada orgánulo (pH, concentraciones de iones) sin interferencias, y aumenta la velocidad y el control de las reacciones al concentrar enzimas y sustratos juntos.</p></div></details>
+
+<h3 id="m2-golgi">Aparato de Golgi</h3>
+<div class="defblock"><span class="label">Definición</span>
+El aparato de Golgi (o complejo de Golgi) es un orgánulo formado por sacos membranosos apilados y curvados llamados <strong>cisternas</strong>, acompañados de vesículas que entran y salen por sus bordes.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Recibe las proteínas y lípidos recién sintetizados en el retículo endoplásmico por su cara <strong>cis</strong> (la de entrada), los <strong>modifica químicamente</strong> (añade o quita azúcares, glucosilación), los <strong>clasifica y etiqueta</strong>, y los <strong>empaqueta en vesículas</strong> que salen por su cara <strong>trans</strong> (la de salida) hacia su destino: la membrana, un lisosoma o la secreción al exterior. También forma los lisosomas.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Es la <strong>oficina de correos y aduana de la célula</strong>: los paquetes llegan del retículo, se abren, se completa su etiqueta (azúcares), se sellan con una dirección y se despachan en vesículas al destino correcto.</div>
+<details class="recall"><summary>Recuperación activa: Ordena el recorrido de una proteína de secreción: Golgi → retículo → exterior. ¿Qué paso ocurre en cada parada?</summary>
+<div class="answer"><p><strong>Retículo endoplásmico rugoso</strong>: síntesis y plegado inicial. <strong>Golgi (cara cis → trans)</strong>: modificación, etiquetado y empaquetado. <strong>Vesícula de secreción</strong>: transporte y fusión con la membrana para liberarla al exterior (exocitosis).</p></div></details>
+</section>
+
+<!-- ============ MÓDULO 3 ============ -->
+<section id="m3">
+<h2 class="module">3. Núcleo</h2>
+<p>El <strong>núcleo</strong> es el orgánulo más grande de la célula eucariota y el centro de control de la información genética: guarda el ADN, lo protege, lo duplica y dirige toda la actividad celular mediante la expresión de los genes.</p>
+
+<h3 id="m3-envoltura">Envoltura nuclear</h3>
+<div class="defblock"><span class="label">Definición</span>
+La envoltura nuclear es la doble membrana (dos bicapas lipídicas) que rodea el núcleo y separa el material genético del citoplasma. El espacio entre ambas membranas se llama <strong>espacio perinuclear</strong> y es continuo con la luz del retículo endoplásmico.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Protege el ADN de las reacciones químicas del citoplasma y permite <strong>regular el intercambio de información</strong>: el ARN mensajero solo puede salir y las proteínas reguladoras solo pueden entrar a través de los poros nucleares. La membrana externa suele tener ribosomas adheridos y participa en la síntesis de proteínas.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Es como la <strong>cámara acorazada de un banco</strong>: el ADN (el patrimonio de la célula) está dentro, bien protegido, y solo se abre la puerta por ventanillas controladas: los poros.</div>
+<details class="recall"><summary>Recuperación activa: ¿Por qué se dice que la envoltura nuclear es una "doble membrana" y con qué orgánulo se comunica directamente?</summary>
+<div class="answer"><p>Porque son <strong>dos bicapas lipídicas</strong> separadas por el espacio perinuclear, y su cara externa es continua con el <strong>retículo endoplásmico</strong>.</p></div></details>
+
+<h3 id="m3-poros">Poros nucleares</h3>
+<div class="defblock"><span class="label">Definición</span>
+Los poros nucleares son complejos proteicos gigantes (más de 30 proteínas distintas, los nucleoporinas) que perforan la envoltura nuclear y forman canales regulados de comunicación entre el núcleo y el citoplasma.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Por los poros <strong>sale</strong> el ARN mensajero y las subunidades ribosómicas hacia el citoplasma, y <strong>entran</strong> las proteínas necesarias: enzimas de replicación, factores de transcripción, histonas y nucleótidos. El paso es <strong>selectivo y bidireccional</strong>: las moléculas grandes necesitan una señal de importación/exportación reconocida por los receptores del poro; las pequeñas difunden libremente.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Cada poro es una <strong>aduana con funcionarios</strong>: no es un agujero cualquiera, es un paso selectivo donde solo entra y sale lo que lleva su "documento" (la señal de localización) en regla.</div>
+<details class="recall"><summary>Recuperación activa: Nombra dos moléculas que salen y dos que entran por los poros nucleares.</summary>
+<div class="answer"><p><strong>Salen</strong>: ARN mensajero y subunidades ribosómicas. <strong>Entran</strong>: proteínas reguladoras (factores de transcripción), histonas y nucleótidos.</p></div></details>
+
+<h3 id="m3-nucleolo">Nucléolo</h3>
+<div class="defblock"><span class="label">Definición</span>
+El nucléolo es una región densa y sin membrana propia dentro del núcleo, donde se transcriben los genes del <strong>ARN ribosómico</strong> (ARNr) y se ensamblan con proteínas para formar las subunidades de los <strong>ribosomas</strong>.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Es la fábrica de ribosomas: aquí el ARNr se combina con proteínas importadas del citoplasma para construir las subunidades ribosómicas, que luego salen por los poros nucleares y se ensamblan como ribosomas funcionales en el citoplasma. Cuanto más activa está una célula en síntesis de proteínas, más prominente es su nucléolo.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El nucléolo es la <strong>fábrica de fábricas</strong>: construye los ribosomas, que a su vez son las fábricas de proteínas de toda la célula. Sin nucléolo no hay ribosomas; sin ribosomas no hay proteínas.</div>
+<details class="recall"><summary>Recuperación activa: Si una célula tiene un nucléolo muy grande, ¿qué sugiere eso sobre su actividad?</summary>
+<div class="answer"><p>Que está produciendo <strong>muchos ribosomas</strong>, lo que indica una <strong>alta tasa de síntesis de proteínas</strong> (por ejemplo, en células en crecimiento o secretoras).</p></div></details>
+
+<h3 id="m3-cromatina">Cromatina (ADN)</h3>
+<div class="defblock"><span class="label">Definición</span>
+La cromatina es la forma en que el ADN se presenta dentro del núcleo cuando la célula no se está dividiendo: una combinación de ADN y <strong>histonas</strong> (proteínas básicas). Puede estar como <strong>eucromatina</strong> (desenrollada, activa, accesible para transcripción) o <strong>heterocromatina</strong> (compactada, inactiva).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Su función es doble: <strong>empaquetar</strong> los ~2 metros de ADN dentro de un núcleo de pocos micrómetros (el ADN se enrolla alrededor de octámeros de histonas formando <strong>nucleosomas</strong>, que se pliegan en estructuras cada vez más compactas) y <strong>regular la expresión génica</strong>: los genes solo pueden leerse cuando la cromatina está accesible. Durante la división celular, la cromatina se condensa al máximo formando los <strong>cromosomas</strong> visibles.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Imagina el ADN como un hilo de coser de 2 metros que debe caber en una canica: se enrolla en carretes (histonas), los carretes se agrupan en madejas (cromatina compactada) y, llegado el momento de repartirlo, se convierte en los cromosomas, los ovillos ordenados que se reparten entre las células hijas.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué diferencia hay entre eucromatina y heterocromatina en cuanto a transcripción?</summary>
+<div class="answer"><p>La <strong>eucromatina</strong> está desenrollada y accesible, por lo que sus genes <strong>sí pueden transcribirse</strong>. La <strong>heterocromatina</strong> está muy compactada y sus genes están <strong>silenciados</strong>.</p></div></details>
+</section>
+
+<!-- ============ MÓDULO 4 ============ -->
+<section id="m4">
+<h2 class="module">4. Metabolismo Celular</h2>
+<p>El <strong>metabolismo</strong> es el conjunto de todas las reacciones químicas que ocurren en la célula para mantener la vida. Se divide en dos grandes direcciones: <strong>catabolismo</strong> (degradar para obtener energía) y <strong>anabolismo</strong> (construir gastando energía).</p>
+
+<h3 id="m4-catabolismo">Procesos catabólicos (catabolismo)</h3>
+<div class="defblock"><span class="label">Definición</span>
+El catabolismo es la rama del metabolismo que <strong>degrada moléculas complejas en moléculas más simples</strong>, liberando la energía que estaba contenida en sus enlaces (reacciones <strong>exergónicas</strong>).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Mediante rutas como la <strong>glucólisis</strong>, la <strong>respiración celular</strong> (ciclo de Krebs y cadena de transporte de electrones en la mitocondria) o la <strong>fermentación</strong>, la célula rompe nutrientes (glucosa, lípidos, proteínas) y captura la energía liberada en forma de enlaces de alta energía del <strong>ATP</strong>. Ejemplo: C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + energía (ATP + calor).</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El catabolismo es como <strong>quemar leña para calentar la casa</strong>, pero en lugar de dejar que la energía escape como calor descontrolado, la célula la captura poco a poco en pequeñas "baterías" recargables: el ATP.</div>
+<details class="recall"><summary>Recuperación activa: ¿El catabolismo libera o consume energía? ¿En qué molécula se almacena principalmente?</summary>
+<div class="answer"><p><strong>Libera</strong> energía (reacciones exergónicas) y una parte se almacena principalmente en el <strong>ATP</strong> (el resto se disipa como calor).</p></div></details>
+
+<h3 id="m4-anabolismo">Procesos anabólicos (anabolismo)</h3>
+<div class="defblock"><span class="label">Definición</span>
+El anabolismo es la rama del metabolismo que <strong>construye moléculas complejas a partir de moléculas simples</strong>, consumiendo energía (reacciones <strong>endergónicas</strong>).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Utiliza la energía del ATP (y el poder reductor de NADPH) para sintetizar lo que la célula necesita: proteínas a partir de aminoácidos, ADN a partir de nucleótidos, glucógeno a partir de glucosa, membranas a partir de lípidos. Permite el <strong>crecimiento, la reparación y la reproducción</strong> celular. Ejemplo: la <strong>fotosíntesis</strong> es el proceso anabólico por excelencia: construye glucosa a partir de CO₂ y H₂O con energía luminosa.</div>
+<table>
+<tr><th>Aspecto</th><th>Catabolismo</th><th>Anabolismo</th></tr>
+<tr><td>Dirección</td><td>Complejo → simple (degradación)</td><td>Simple → complejo (síntesis)</td></tr>
+<tr><td>Energía</td><td>Libera energía (exergónico)</td><td>Consume energía (endergónico)</td></tr>
+<tr><td>Molécula clave</td><td>Produce ATP y NADH</td><td>Gasta ATP y NADPH</td></tr>
+<tr><td>Objetivo</td><td>Obtener energía y precursores</td><td>Construir biomoléculas y estructuras</td></tr>
+<tr><td>Ejemplo</td><td>Glucólisis, respiración celular, fermentación</td><td>Síntesis de proteínas, fotosíntesis, glucogénesis</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: ¿Cómo se conectan catabolismo y anabolismo en la célula?</summary>
+<div class="answer"><p>El catabolismo <strong>genera el ATP</strong> que el anabolismo <strong>gasta</strong>. Son las dos caras de una misma economía energética celular: uno ingresa "dinero" (energía), el otro lo invierte en construcción.</p></div></details>
+
+<h3 id="m4-atp">Transferencia y ciclo de energía (ATP)</h3>
+<div class="defblock"><span class="label">Definición</span>
+El <strong>adenosín trifosfato (ATP)</strong> es el nucleótido formado por adenina, ribosa y tres grupos fosfato unidos por enlaces de alta energía. Es la <strong>moneda energética universal</strong> de todas las células.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+El ATP funciona en un <strong>ciclo continuo</strong>: al romperse el enlace entre el segundo y tercer fosfato (hidrólisis: ATP + H₂O → ADP + P<sub>i</sub> + energía) se libera energía utilizable para trabajo celular (contracción muscular, transporte activo, síntesis). El ADP resultante se <strong>recarga</strong> con un nuevo fosfato usando la energía del catabolismo o de la luz solar (fotosíntesis), cerrando el ciclo. Una célula recicla su peso completo en ATP varias veces al día.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El ATP es como una <strong>tarjeta de transporte recargable</strong>: se "paga" (hidrólisis ATP→ADP) para realizar cualquier trabajo celular, y luego se "recarga" (fosforilación ADP→ATP) con la energía de los alimentos o del sol. No es un almacén a largo plazo, sino <strong>efectivo de curso inmediato</strong>.</div>
+<details class="recall"><summary>Recuperación activa: ¿Por qué se dice que el ATP es una "moneda" y no un "almacén" de energía?</summary>
+<div class="answer"><p>Porque la célula mantiene muy <strong>poca cantidad</strong> de ATP a la vez: se gasta y se regenera constantemente. Es un intermediario inmediato de transferencia de energía, no una reserva de largo plazo (eso son las grasas o el glucógeno).</p></div></details>
+</section>
+
+<!-- ============ MÓDULO 5 ============ -->
+<section id="m5">
+<h2 class="module">5. Metabolismo</h2>
+<p>Este módulo profundiza en la <strong>química del metabolismo</strong>: cómo están organizadas las reacciones bioquímicas, qué papel cumplen las enzimas y cómo se genera y se gasta la energía en cada reacción.</p>
+
+<h3 id="m5-reacciones">Reacciones bioquímicas</h3>
+<div class="defblock"><span class="label">Definición</span>
+Las reacciones bioquímicas son transformaciones químicas que ocurren dentro de la célula, organizadas en <strong>rutas metabólicas</strong>: secuencias ordenadas donde el producto de una reacción es el sustrato de la siguiente.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Se clasifican según su balance energético: <strong>exergónicas</strong> (liberan energía, ΔG negativo; impulsan el catabolismo) y <strong>endergónicas</strong> (requieren energía, ΔG positivo; impulsan el anabolismo). En la práctica suelen ir <strong>acopladas</strong>: la energía liberada por una reacción exergónica (como la hidrólisis del ATP) se usa inmediatamente para "empujar" una endergónica. Otras clasificaciones: hidrólisis (romper con agua), condensación (unir liberando agua), oxidación-reducción (transferencia de electrones, clave en respiración y fotosíntesis).</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Una ruta metabólica es como una <strong>cadena de montaje</strong>: cada enzima (operario) realiza una sola transformación y pasa el producto al siguiente puesto. Nadie hace todo, pero el conjunto transforma la glucosa en energía con precisión y control.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué significa que dos reacciones estén "acopladas"?</summary>
+<div class="answer"><p>Que la energía liberada por una reacción <strong>exergónica</strong> se usa para impulsar una <strong>endergónica</strong>, de modo que el proceso global es favorable. El acoplamiento típico se hace a través de la hidrólisis del ATP.</p></div></details>
+
+<h3 id="m5-enzimas">Papel y regulación de enzimas</h3>
+<div class="defblock"><span class="label">Definición</span>
+Las enzimas son <strong>proteínas catalíticas</strong> (algunas son ARN, ribozimas) que aceleran las reacciones bioquímicas <strong>sin consumirse</strong> en el proceso. Bajan la <strong>energía de activación</strong>: la barrera que hay que superar para que una reacción ocurra.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Cada enzima posee un <strong>sitio activo</strong> con una forma tridimensional específica que reconoce a su <strong>sustrato</strong> (modelo llave-cerradura, en la práctica más bien ajuste inducido). Forman un complejo enzima-sustrato, estabilizan el estado de transición y liberan el <strong>producto</strong> sin alterarse. Su actividad depende de factores como la <strong>temperatura</strong> y el <strong>pH</strong> (cada enzima tiene su óptimo; fuera de él se desnaturaliza). La regulación se produce por:
+<ul>
+<li><strong>Alosterismo</strong>: una molécula reguladora se une fuera del sitio activo y cambia la forma de la enzima (activándola o inhibiéndola).</li>
+<li><strong>Inhibición competitiva</strong>: una molécula similar al sustrato compite por el sitio activo.</li>
+<li><strong>Retroalimentación (feedback)</strong>: el producto final de una ruta inhibe a la enzima del primer paso, evitando producir de más.</li>
+<li><strong>Cofactores y coenzimas</strong>: iones metálicos o vitaminas que la enzima necesita para funcionar.</li>
+</ul></div>
+<div class="keyblock"><span class="label">Idea clave</span>
+La enzima es un <strong>atalajo, no un motor</strong>: no añade energía a la reacción, solo hace que sea más fácil de superar (como un túnel por la montaña en vez de por encima). Y la retroalimentación es el "termostato" celular: cuando hay suficiente producto, la propia ruta se apaga.</div>
+<table>
+<tr><th>Aspecto</th><th>Inhibición competitiva</th><th>Inhibición alostérica (no competitiva)</th></tr>
+<tr><td>Dónde actúa el inhibidor</td><td>En el sitio activo (compite con el sustrato)</td><td>En un sitio distinto ( alostérico)</td></tr>
+<tr><td>Efecto sobre la velocidad máxima</td><td>Se puede superar añadiendo más sustrato</td><td>Se reduce la actividad aunque haya mucho sustrato</td></tr>
+<tr><td>Modelo</td><td>Como una llave falsa que ocupa la cerradura</td><td>Como un interruptor que cambia la forma de la cerradura</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: ¿Por qué subir mucho la temperatura destruye la actividad enzimática?</summary>
+<div class="answer"><p>Porque el calor <strong>desnaturaliza</strong> la proteína: rompe las interacciones que mantienen su forma tridimensional, y sin su forma correcta el sitio activo deja de encajar con el sustrato. La enzima no "se cansa": se <strong>deforma</strong>.</p></div></details>
+
+<h3 id="m5-energia">Generación y gasto de energía (ATP)</h3>
+<div class="defblock"><span class="label">Definición</span>
+La <strong>fosforilación</strong> es el proceso por el cual se añade un grupo fosfato al ADP para formar ATP. Puede ser <strong>a nivel de sustrato</strong> (transferencia directa de un fosfato de alta energía durante la glucólisis y el ciclo de Krebs) u <strong>oxidativa</strong> (usando la energía de los electrones en la cadena transportadora de la membrana mitocondrial).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+La célula <strong>genera</strong> ATP en la glucólisis (citoplasma), el ciclo de Krebs y, sobre todo, la cadena de transporte de electrones (mitocondria); las células vegetales lo generan además en la <strong>fotofosforilación</strong> durante la fotosíntesis. Ese ATP se <strong>gasta</strong> en tres grandes tipos de trabajo celular: <strong>trabajo mecánico</strong> (contracción muscular, movimiento de cílios y flagelos), <strong>trabajo de transporte</strong> (bombas como la Na⁺/K⁺, transporte activo) y <strong>trabajo químico</strong> (síntesis de macromoléculas: anabolismo).</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+Piensa en el ATP como el <strong>enchufe universal</strong> de la célula: sea cual sea la tarea (mover, transportar o construir), todos los aparatos se conectan a la misma fuente. Y el equilibrio entre producción y consumo está finamente regulado: si el ATP abunda, las rutas de degradación se frenan (retroalimentación).</div>
+<details class="recall"><summary>Recuperación activa: ¿En qué tres tipos de "trabajo" gasta la célula su ATP?</summary>
+<div class="answer"><p><strong>Trabajo mecánico</strong> (movimiento y contracción), <strong>trabajo de transporte</strong> (bombas y transporte activo a través de membranas) y <strong>trabajo químico</strong> (síntesis de moléculas complejas).</p></div></details>
+</section>
+
+<!-- ============ MÓDULO 6 ============ -->
+<section id="m6">
+<h2 class="module">6. Fotosíntesis</h2>
+<p>La <strong>fotosíntesis</strong> es el proceso anabólico por el cual los organismos <strong>autótrofos</strong> (plantas, algas y algunas bacterias) transforman la energía de la luz en energía química, sintetizando glucosa a partir de moléculas inorgánicas sencillas. Es la base de casi toda la vida en la Tierra.</p>
+
+<h3 id="m6-luz">Captación de luz solar</h3>
+<div class="defblock"><span class="label">Definición</span>
+La captación de luz ocurre en los <strong>cloroplastos</strong>, orgánulos que contienen pigmentos como la <strong>clorofila</strong> (que absorbe sobre todo luz roja y azul, reflejando la verde) y carotenoides, organizados en <strong>fotosistemas</strong> (II y I) en la membrana de los <strong>tilacoides</strong>.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+Cuando un fotón golpea una molécula de clorofila, excita un electrón que se transfiere por una <strong>cadena de transporte de electrones</strong>. La energía liberada en ese tránsito se usa para bombear protones (H⁺) y generar un gradiente que produce ATP (<strong>fotofosforilación</strong>), y para reducir NADP⁺ a NADPH. Las <strong>fases luminosas</strong> (dependientes de la luz) convierten así la energía luminosa en energía química portátil: ATP y NADPH.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+La clorofila funciona como una <strong>antena que atrapa paquetes de energía</strong> (fotones) y los convierte en "corriente eléctrica" (electrones excitados). Lo notable es que las plantas verdes no absorben la luz verde: la reflejan, y por eso las vemos de ese color.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué dos moléculas energéticas produce la fase luminosa y para qué se usan después?</summary>
+<div class="answer"><p><strong>ATP</strong> y <strong>NADPH</strong>: ambas se usan en el ciclo de Calvin (estroma) como fuente de energía y de poder reductor para fabricar glucosa a partir del CO₂.</p></div></details>
+
+<h3 id="m6-reactivos">Reactivos: agua (H₂O) y dióxido de carbono (CO₂)</h3>
+<div class="defblock"><span class="label">Definición</span>
+Los <strong>reactivos</strong> de la fotosíntesis son el <strong>agua</strong> y el <strong>dióxido de carbono</strong>: moléculas inorgánicas sencillas y de baja energía que la planta incorpora del entorno (el agua por las raíces; el CO₂ por los estomas de las hojas).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+El agua es el <strong>donante de electrones</strong>: en la <strong>fotólisis</strong> (rotura de la molécula de agua por la luz, en el fotosistema II) se separa en O₂, protones y electrones; esos electrones "repuestos" mantienen a la clorofila activa tras ceder los suyos. El CO₂ es la <strong>materia prima del carbono</strong>: en el ciclo de Calvin (en el estroma) se fija gracias a la enzima RuBisCO y, tras varias vueltas del ciclo con gasto de ATP y NADPH, se convierte en glucosa.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+La ecuación global: <strong>6 CO₂ + 6 H₂O + luz → C₆H₁₂O₆ + 6 O₂</strong>. Fíjate: el <strong>oxígeno del aire proviene del agua</strong> (no del CO₂). Y el CO₂ aporta los "esqueletos" de carbono de la glucosa: la luz solo aporta la energía para ensamblarlos.</div>
+<details class="recall"><summary>Recuperación activa: ¿De qué reactivo procede el oxígeno (O₂) que liberan las plantas?</summary>
+<div class="answer"><p>Del <strong>agua</strong>, que se rompe por fotólisis en el fotosistema II. Es un error común pensar que proviene del CO₂: el oxígeno del CO₂ acaba en la glucosa y en el agua.</p></div></details>
+
+<h3 id="m6-productos">Productos: oxígeno (O₂) y glucosa (C₆H₁₂O₆)</h3>
+<div class="defblock"><span class="label">Definición</span>
+Los <strong>productos</strong> de la fotosíntesis son el <strong>oxígeno molecular</strong> (liberado como subproducto de la fotólisis del agua) y la <strong>glucosa</strong> (azúcar de seis carbonos sintetizado en el ciclo de Calvin a partir del CO₂).</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+La glucosa es el <strong>almacén de energía química</strong> de la planta: puede consumirse en la respiración celular, convertirse en almidón para reserva, o usarse como ladrillo para fabricar celulosa y otras biomoléculas. El O₂, aunque para la planta es un "desecho", es un subproducto trascendental: hace posible la respiración aerobia de animales, plantas y hongos, que obtienen ATP degradando glucosa con ese O₂.</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+La fotosíntesis y la respiración celular son <strong>procesos opuestos y complementarios</strong>: la fotosíntesis "sube la escalera" (construye glucosa guardando energía luminosa) y la respiración "la baja" (degrada glucosa liberando energía). El carbono y el oxígeno circulan entre ambos en un ciclo global.</div>
+<table>
+<tr><th>Aspecto</th><th>Fotosíntesis</th><th>Respiración celular</th></tr>
+<tr><td>Reactivos</td><td>6 CO₂ + 6 H₂O + luz</td><td>C₆H₁₂O₆ + 6 O₂</td></tr>
+<tr><td>Productos</td><td>C₆H₁₂O₆ + 6 O₂</td><td>6 CO₂ + 6 H₂O + ATP</td></tr>
+<tr><td>Tipo de proceso</td><td>Anabólico (endergónico; requiere energía lumínica)</td><td>Catabólico (exergónico; libera energía)</td></tr>
+<tr><td>Dónde ocurre</td><td>Cloroplastos (tilacoides y estroma)</td><td>Citosol y mitocondrias</td></tr>
+<tr><td>Flujo de energía</td><td>Luz → energía química (glucosa)</td><td>Glucosa → ATP (energía utilizable)</td></tr>
+</table>
+<details class="recall"><summary>Recuperación activa: ¿Por qué se dice que la glucosa es una "batería cargada con luz del sol"?</summary>
+<div class="answer"><p>Porque sus enlaces almacenan la energía luminosa capturada durante la fotosíntesis. Cuando la planta (o el animal que se la come) respire esa glucosa, recuperará esa energía en forma de ATP.</p></div></details>
+
+<h3 id="m6-estroma">Estructura funcional: estroma</h3>
+<div class="defblock"><span class="label">Definición</span>
+El estroma es el <strong>medio interno fluido del cloroplasto</strong>, rodeado por la doble membrana del orgánulo y atravesado por los tilacoides (sacos membranosos apilados formando grana). Contiene enzimas, ADN cloroplástico, ribosomas y el <strong>ciclo de Calvin</strong>.</div>
+<div class="mechblock"><span class="label">Mecanismo / función</span>
+En el estroma ocurre la <strong>fase oscura</strong> (independiente de la luz, aunque suele suceder de día): el ciclo de Calvin fija el CO₂ mediante la enzima RuBisCO y, usando el ATP y el NADPH producidos en las membranas de los tilacoides, ensambla la glucosa. Es decir: los tilacoides <strong>capturan la energía</strong> y el estroma <strong>la invierte construyendo azúcar</strong>. Estructura y función se corresponden: la compartimentación separa las reacciones dependientes de la luz (tilacoides) de las que fijan carbono (estroma).</div>
+<div class="keyblock"><span class="label">Idea clave</span>
+El cloroplasto es una <strong>fábrica con dos talleres</strong>: en el taller de los tilacoides la luz se convierte en "electricidad" y "tarjetas" energéticas (ATP y NADPH); en el taller del estroma, esas tarjetas pagan la construcción de la glucosa. Doble membrana, doble taller, un solo producto.</div>
+<details class="recall"><summary>Recuperación activa: ¿Qué fase de la fotosíntesis ocurre en el estroma y qué le llega desde los tilacoides?</summary>
+<div class="answer"><p>El <strong>ciclo de Calvin</strong> (fase oscura o independiente de la luz). Desde los tilacoides le llegan el <strong>ATP</strong> y el <strong>NADPH</strong>, que aportan la energía y el poder reductor para convertir el CO₂ en glucosa.</p></div></details>
+</section>
+
+<!-- ============ GLOSARIO ============ -->
+<section id="glosario">
+<h2 class="module">📖 Glosario buscable</h2>
+<div id="glossaryPanel">
+  <input id="glossarySearch" type="search" placeholder="Escribe un concepto: p. ej. «ATP», «en…», «osmosis»…" aria-label="Buscar en el glosario" />
+  <p class="count">Escribe para filtrar en tiempo real. <span id="glossCount"></span></p>
+  <div id="glossaryList"></div>
+</div>
+</section>
+
+<footer>Guía interactiva de estudio · Biología celular y bioquímica · Guarda esta página como <code>index.html</code> y ábrela en cualquier navegador.</footer>
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Glosario (datos embebidos, sin red) ---------- */
+  var GLOSARIO = [
+    ["Bicapa lipídica","Doble capa de fosfolípidos con colas hidrófobas hacia dentro y cabezas hidrófilas hacia fuera; estructura básica de todas las membranas biológicas."],
+    ["Colesterol","Lípido esteroide inserto entre los fosfolípidos que regula la fluidez de la membrana: la estabiliza con calor y la flexibiliza con frío."],
+    ["Glúcidos (membrana)","Azúcares unidos a lípidos o proteínas que forman el glucocálix; actúan como etiquetas de identidad y reconocimiento celular."],
+    ["Difusión","Transporte pasivo de partículas desde mayor a menor concentración, sin gasto de ATP."],
+    ["Difusión facilitada","Difusión de moléculas polares o iones a través de proteínas de canal o transportadoras, siempre a favor del gradiente y sin ATP."],
+    ["Ósmosis","Difusión del agua a través de una membrana semipermeable, desde la solución con menos soluto hacia la que tiene más."],
+    ["Hipertónico","Medio con mayor concentración de soluto que el citoplasma: la célula pierde agua."],
+    ["Hipotónico","Medio con menor concentración de soluto que el citoplasma: la célula gana agua."],
+    ["Transporte activo","Traslado de sustancias en contra de su gradiente de concentración, con gasto de ATP (p. ej., bomba Na⁺/K⁺)."],
+    ["Proteína integral","Proteína inserta en la bicapa lipídica; incluye receptores, enzimas, transportadoras y canales."],
+    ["Proteína de canal","Proteína integral que atraviesa la membrana formando un poro acuoso selectivo para iones o moléculas pequeñas; puede ser de compuerta."],
+    ["Glucocálix","Capa de glúcidos en la cara externa de la membrana; función de reconocimiento e identidad celular."],
+    ["Mosaico fluido","Modelo de membrana como un mar de lípidos fluido donde flotan proteínas que se desplazan lateralmente."],
+    ["Citoplasma","Conjunto de material entre la membrana y la envoltura nuclear: citosol + citoesqueleto + orgánulos."],
+    ["Citosol","Fase acuosa del citoplasma donde ocurre la glucólisis y flotan ribosomas, enzimas y metabolitos."],
+    ["Citoesqueleto","Red de microtúbulos, microfilamentos de actina y filamentos intermedios que da forma, soporte y vías de transporte a la célula."],
+    ["Microtúbulo","Filamento de tubulina del citoesqueleto; vía de las proteínas motoras y componente del huso mitótico."],
+    ["Orgánulo","Estructura intracelular especializada y delimitada por membrana con función definida (mitocondria, Golgi, lisosoma…)."],
+    ["Compartimentación","Principio de organización celular: cada orgánulo mantiene su propio microambiente químico."],
+    ["Aparato de Golgi","Orgánulo de cisternas apiladas que modifica, etiqueta y despacha proteínas y lípidos; forma los lisosomas."],
+    ["Cara cis / trans","Cara de entrada (cis) y de salida (trans) del Golgi, por donde llegan y salen las vesículas."],
+    ["Lisosoma","Orgánulo digestivo con enzimas hidrolíticas ácidas; digiere materiales y desechos celulares."],
+    ["Mitocondria","Orgánulo de doble membrana donde ocurre la respiración celular y se genera la mayor parte del ATP."],
+    ["Ribosoma","Complejo de ARNr y proteínas que sintetiza proteínas leyendo el ARN mensajero."],
+    ["Núcleo","Orgánulo que guarda, protege y expresa el ADN; centro de control de la célula eucariota."],
+    ["Envoltura nuclear","Doble membrana que rodea el núcleo; su cara externa es continua con el retículo endoplásmico."],
+    ["Poros nucleares","Complejos proteicos selectivos y bidireccionales que comunican el núcleo con el citoplasma."],
+    ["Nucléolo","Región del núcleo donde se transcribe el ARN ribosómico y se ensamblan las subunidades de los ribosomas."],
+    ["Cromatina","Combinación de ADN e histonas; eucromatina activa (accesible) frente a heterocromatina compacta (silenciada)."],
+    ["Nucleosoma","Unidad básica de empaquetado: ADN enrollado alrededor de un octámero de histonas."],
+    ["Catabolismo","Rama del metabolismo que degrada moléculas complejas liberando energía (exergónico); produce ATP."],
+    ["Anabolismo","Rama del metabolismo que construye moléculas complejas consumiendo energía (endergónico); gasta ATP."],
+    ["Glucólisis","Ruta catabólica en el citosol que transforma glucosa en piruvato con producción neta de ATP."],
+    ["Respiración celular","Degradación aerobia de la glucosa (ciclo de Krebs + cadena de transporte de electrones) en la mitocondria."],
+    ["Fermentación","Catabolismo anaerobio que regenera NAD⁺ sin cadena respiratoria; produce poco ATP y ácido láctico o etanol."],
+    ["ATP","Adenosín trifosfato: moneda energética universal; su hidrólisis (ATP→ADP+Pi) libera energía para el trabajo celular."],
+    ["ADP","Adenosín difosfato: forma \"descargada\" del ATP; se recarga por fosforilación."],
+    ["Fosforilación","Adición de un grupo fosfato al ADP para formar ATP (a nivel de sustrato u oxidativa)."],
+    ["Ruta metabólica","Secuencia ordenada de reacciones enzimáticas donde el producto de una es el sustrato de la siguiente."],
+    ["Reacción exergónica","Reacción que libera energía (ΔG negativo); impulsa el catabolismo."],
+    ["Reacción endergónica","Reacción que consume energía (ΔG positivo); se impulsa acoplándola a la hidrólisis del ATP."],
+    ["Enzima","Proteína catalítica que acelera reacciones bajando la energía de activación, sin consumirse."],
+    ["Energía de activación","Barrera energética que debe superarse para que ocurra una reacción; las enzimas la reducen."],
+    ["Sitio activo","Región de la enzima con forma complementaria al sustrato donde ocurre la catálisis."],
+    ["Sustrato","Molécula sobre la que actúa una enzima; se une al sitio activo formando el complejo enzima-sustrato."],
+    ["Inhibición competitiva","Bloqueo de la enzima porque una molécula similar al sustrato ocupa el sitio activo."],
+    ["Inhibición alostérica","Regulación por una molécula unida a un sitio distinto del activo que cambia la forma de la enzima."],
+    ["Retroalimentación (feedback)","Regulación en la que el producto final de una ruta inhibe el paso enzimático inicial."],
+    ["Cofactor / coenzima","Ion metálico u orgánico (a menudo derivado de una vitamina) necesario para la actividad enzimática."],
+    ["Fotosíntesis","Proceso anabólico de los autótrofos que convierte CO₂ y H₂O en glucosa y O₂ usando energía luminosa."],
+    ["Cloroplasto","Orgánulo de doble membrana donde ocurre la fotosíntesis; contiene tilacoides y estroma."],
+    ["Clorofila","Pigmento de los fotosistemas que absorbe luz roja y azul (refleja la verde) y dispara el flujo de electrones."],
+    ["Fotosistema","Complejo de pigmentos y proteínas (II y I) en la membrana del tilacoide que capta la luz."],
+    ["Fotólisis","Rotura de la molécula de agua por la luz en el fotosistema II; libera O₂, H⁺ y electrones."],
+    ["Fase luminosa","Etapa de la fotosíntesis en los tilacoides que produce ATP y NADPH usando energía de la luz."],
+    ["Fase oscura (ciclo de Calvin)","Fijación del CO₂ en el estroma usando el ATP y NADPH de la fase luminosa para sintetizar glucosa."],
+    ["RuBisCO","Enzima del estroma que fija el CO₂ sobre un azúcar de cinco carbonos iniciando el ciclo de Calvin."],
+    ["Estroma","Fluido interno del cloroplasto donde ocurre el ciclo de Calvin; contiene enzimas, ADN y ribosomas."],
+    ["Tilacoide","Saco membranoso interno del cloroplasto (en pilas o grana) donde ocurren las fases luminosas."],
+    ["NADPH","Molécula transportadora de electrones y poder reductor producida en la fase luminosa; alimenta el ciclo de Calvin."],
+    ["Autótrofo","Organismo capaz de sintetizar su propio alimento a partir de moléculas inorgánicas (p. ej., mediante fotosíntesis)."]
+  ];
+
+  var list = document.getElementById("glossaryList");
+  var search = document.getElementById("glossarySearch");
+  var countEl = document.getElementById("glossCount");
+
+  function normalize(s){
+    return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  }
+  function render(q){
+    var nq = normalize(q||"").trim();
+    var shown = 0, html = "";
+    GLOSARIO.forEach(function(g){
+      var hay = normalize(g[0] + " " + g[1]);
+      if(!nq || hay.indexOf(nq) !== -1){
+        shown++;
+        var term = g[0], def = g[1];
+        if(nq){
+          try{
+            var esc = nq.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+            var re = new RegExp("("+esc+")","ig");
+            term = term.replace(re,"<mark>$1</mark>");
+            def = def.replace(re,"<mark>$1</mark>");
+          }catch(e){}
+        }
+        html += '<div class="gloss-item"><b>'+term+'</b><br />'+def+'</div>';
+      }
+    });
+    if(!shown) html = '<p class="no-results">Sin resultados. Prueba con otra palabra (p. ej. «ATP», «membrana», «en…»).</p>';
+    list.innerHTML = html;
+    countEl.textContent = "(" + shown + " de " + GLOSARIO.length + " términos)";
+  }
+  search.addEventListener("input", function(){ render(search.value); });
+  render("");
+
+  /* ---------- Tema claro/oscuro (con fallback seguro) ---------- */
+  var btnTheme = document.getElementById("btnTheme");
+  var themeIcon = "🌙 Modo noche";
+  var altIcon = "☀️ Modo día";
+  var stored = null;
+  try{ stored = localStorage.getItem("bio-theme"); }catch(e){}
+  if(stored === "dark"){
+    document.documentElement.setAttribute("data-theme","dark");
+    btnTheme.textContent = altIcon;
+  }
+  btnTheme.addEventListener("click", function(){
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    if(dark){
+      document.documentElement.removeAttribute("data-theme");
+      btnTheme.textContent = themeIcon;
+      try{ localStorage.setItem("bio-theme","light"); }catch(e){}
+    }else{
+      document.documentElement.setAttribute("data-theme","dark");
+      btnTheme.textContent = altIcon;
+      try{ localStorage.setItem("bio-theme","dark"); }catch(e){}
+    }
+  });
+
+  /* ---------- Modo concentración + resaltado de sección activa ---------- */
+  var btnFocus = document.getElementById("btnFocus");
+  var focusOn = false;
+  btnFocus.addEventListener("click", function(){
+    focusOn = !focusOn;
+    document.body.classList.toggle("focus", focusOn);
+    btnFocus.classList.toggle("active", focusOn);
+    btnFocus.textContent = focusOn ? "✖️ Salir de concentración" : "🎯 Concentración";
+    if(focusOn) highlightActive();
+  });
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main section"));
+  function highlightActive(){
+    if(!focusOn) return;
+    var best = null, bestTop = Infinity;
+    sections.forEach(function(s){
+      var r = s.getBoundingClientRect();
+      if(r.top < 120 && r.top < bestTop){ best = s; bestTop = r.top; }
+    });
+    sections.forEach(function(s){ s.classList.toggle("active-section", s === best); });
+  }
+  window.addEventListener("scroll", highlightActive, {passive:true});
+
+  /* ---------- Enlace activo en el índice ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#sidebar a"));
+  function setActiveLink(){
+    var bestId = null, bestTop = Infinity;
+    sections.forEach(function(s){
+      var r = s.getBoundingClientRect();
+      if(r.top < 120 && r.top < bestTop){ bestId = s.id; bestTop = r.top; }
+    });
+    links.forEach(function(a){
+      a.style.background = (bestId && a.getAttribute("href") === "#"+bestId) ? "var(--accent-soft)" : "";
+      a.style.color = (bestId && a.getAttribute("href") === "#"+bestId) ? "var(--accent)" : "";
+    });
+  }
+  window.addEventListener("scroll", setActiveLink, {passive:true});
+  setActiveLink();
+})();
+</script>
+</body>
+</html>
